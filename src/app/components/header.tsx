@@ -49,14 +49,18 @@ function Header() {
         </Button>
         
       )}
-      
-      <Image
-        src={session?.user?.image || USER_IMAGE}
-        width={40}
-        height={40}
-        alt="Picture of user"
-        className='rounded-full'/>
-        {/* <p>{session?.user?.email}</p> */}
+
+      {!session?.user ? (
+        <FaRegCircleUser className='text-3xl mt-1 items-center' />
+      ) : (
+        <Image
+          src={USER_IMAGE}
+          width={50}
+          height={50}
+          alt="Picture of the author"
+          className='rounded-full '
+        />
+      )}
     </div>
     </div>
   )
