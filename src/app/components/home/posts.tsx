@@ -12,6 +12,7 @@ interface Post {
   image: string;
   price: number;
   date: string;
+  tel: string;
 }
 
 function Posts({ posts } : { posts: Post[] }) {

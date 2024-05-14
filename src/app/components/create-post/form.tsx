@@ -43,6 +43,11 @@ const FormSchema = z.object({
   image: z.string().min(1, {
     message: "La imagen es obligatoria.",
   }),
+  tel: z.string().min(10, {
+    message: "El teléfono debe tener 10 digitos.",
+  }).refine(value => value.length <= 10, {
+    message: "El telefono no puede tener mas de 10 digitos.",
+  }),
   username: z.string().optional(),
   useremail: z.string().optional(),
   userimage: z.string().optional(),
@@ -65,6 +70,7 @@ function FormPost() {
       desc: "",
       price: "",
       image: "",
+      tel: "",
     },
   })
 
@@ -181,6 +187,23 @@ function FormPost() {
                 </FormControl>
                 <FormDescription>
                   Este es el precio de tu producto.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="tel"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Teléfono de contacto</FormLabel>
+                <FormControl>
+                  <Input type="text" maxLength={10} placeholder="Tu número de teléfono" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Este es el numero de teléfono con el que podrán contactarte.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

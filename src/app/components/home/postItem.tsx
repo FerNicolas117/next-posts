@@ -21,6 +21,7 @@ interface Post {
   image: string;
   price: number;
   date: string;
+  tel: string;
 }
 
 function PostItem({ post } : { post: Post }) {
@@ -52,7 +53,16 @@ function PostItem({ post } : { post: Post }) {
                 { formattedDate } a las { formattedTime }
               </div>
             </div>
-            <CardDescription>{ post.useremail }</CardDescription>
+            <div>
+              <CardDescription className="mt-2 cursor-pointer flex items-center">
+              <a href={`https://wa.me/${post.tel}`} target="_blank" rel="noopener noreferrer">
+                <Button className="bg-gray-200 hover:bg-gray-300">
+                  <Image src={'/whatsapp.svg'} width={22} height={22} alt='Google' className='mr-2'/>
+                  <span className="text-black">{ post.tel }</span>
+                </Button>
+              </a>
+              </CardDescription>
+            </div>
         </CardHeader>
         <div className="p-2 justify-items-center">
           <CardContent className="">

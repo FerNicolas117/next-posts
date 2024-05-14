@@ -10,6 +10,7 @@ interface Post {
   image: string;
   price: number;
   date: string;
+  tel: string;
 }
 
 function PostModal({ post } : { post: Post }) {
