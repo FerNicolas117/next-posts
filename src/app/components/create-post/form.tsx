@@ -85,7 +85,7 @@ function FormPost() {
     const file = (document.getElementById('image') as HTMLInputElement).files?.[0];
 
     data.price = priceNumber.toString();
-    data.date = new Date().toISOString();
+    data.date = new Date(Date.now()).toISOString();
     //console.log(data);
     //alert(JSON.stringify(data, null, 2));
   
