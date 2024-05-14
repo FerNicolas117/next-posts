@@ -42,6 +42,10 @@ const FormSchema = z.object({
   image: z.string().min(1, {
     message: "La imagen es obligatoria.",
   }),
+  username: z.string().optional(),
+  useremail: z.string().optional(),
+  userimage: z.string().optional(),
+  date: z.string().optional(),
 })
 
 function FormPost() {
@@ -65,15 +69,21 @@ function FormPost() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     if (session?.user) {
-      data.username = session.user.name;
-      data.useremail = session.user.email;
-      data.userimage = session.user.image;
+      if (session.user.name) {
+        data.username = session.user.name;
+      }
+      if (session.user.email) {
+        data.useremail = session.user.email;
+      }
+      if (session.user.image) {
+        data.userimage = session.user.image;
+      }
     }
 
     const priceNumber = parseFloat(data.price);
     const file = (document.getElementById('image') as HTMLInputElement).files?.[0];
 
-    data.price = priceNumber;
+    data.price = priceNumber.toString();
     data.date = new Date().toISOString();
     //console.log(data);
     //alert(JSON.stringify(data, null, 2));
@@ -83,20 +93,23 @@ function FormPost() {
       await setDoc(doc(db, "posts", postId), data); // Usa postId como referencia del documento
       //console.log("Documento guardado correctamente con ID:", postId);
 
-      const storageRef = ref(storage, `estlmarket/`+file?.name);
-      uploadBytes(storageRef, file).then((snapshot) => {
-        //console.log('Uploaded a blob or file!');
-      }).then(resp => {
-        getDownloadURL(storageRef).then((url) => {
-          //console.log('File available at', url);
-          data.image = url;
-          setDoc(doc(db, "posts", postId), data);
+      if (file) {
+        const storageRef = ref(storage, `estlmarket/`+file?.name);
+        uploadBytes(storageRef, file).then((snapshot) => {
+          //console.log('Uploaded a blob or file!');
+        }).then(resp => {
+          getDownloadURL(storageRef).then((url) => {
+            //console.log('File available at', url);
+            data.image = url;
+            setDoc(doc(db, "posts", postId), data);
+          })
+          toast.success('¡Publicación creada correctamente! Redireccionando...')
+          setTimeout(() => {
+            router.push('/');
+          }, 3000);
         })
-        toast.success('¡Publicación creada correctamente! Redireccionando...')
-        setTimeout(() => {
-          router.push('/');
-        }, 3000);
-      })
+      }
+      
     } catch (error) {
       toast.error('Error, no se ha creado la publicación. Redireccionando...')
       setTimeout(() => {
