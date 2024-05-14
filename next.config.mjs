@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
 
   reactStrictMode: false,
@@ -22,7 +23,13 @@ const nextConfig = {
         hostname: "firebasestorage.googleapis.com",
       },
     ],
-  }
+  },
+
+  env: {
+    NEXT_PUBLIC_FIREBASE_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    NEXT_PUBLIC_FIREBASE_APP_ID: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+    // Agrega otras variables de entorno aquí si las necesitas
+  },
 
 };
 

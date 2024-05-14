@@ -5,7 +5,7 @@ import Image from "next/image";
 import Hero from "./components/home/hero";
 import Search from "./components/home/search";
 import Categories from "./components/home/categories";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getFirestore, collection, getDocs, DocumentData } from "firebase/firestore";
 import app from "../config/FirebaseConfig"
 import { useEffect, useState } from "react";
 import Posts from "./components/home/posts";
@@ -13,7 +13,7 @@ import Posts from "./components/home/posts";
 export default function Home() {
 
   const db = getFirestore(app);
-  const  [posts, setPosts] = useState([]);
+  const  [posts, setPosts] = useState<DocumentData[]>([]);
 
   useEffect(() => {
     getPost();

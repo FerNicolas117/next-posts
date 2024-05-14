@@ -23,6 +23,8 @@ function Header() {
   const {data: session } = useSession();
   console.log("Session ", session)
 
+  const userImage = session?.user?.image ?? USER_IMAGE;
+
   return (
     <div className='flex justify-between p-3 border-b-[2px] border-[#0069FF]'>
       <Image
@@ -59,7 +61,7 @@ function Header() {
         <PiUserCirclePlusLight className='text-4xl mt-1 items-center mb-1' />
       ) : (
         <Image
-          src={session?.user?.image}
+          src={userImage}
           width={40}
           height={40}
           alt="Picture of the author"

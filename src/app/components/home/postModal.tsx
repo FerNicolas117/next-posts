@@ -1,7 +1,18 @@
 import React from 'react'
 import PostItem from './postItem'
 
-function PostModal({ post }) {
+interface Post {
+  title: string;
+  userimage: string;
+  username: string;
+  useremail: string;
+  desc: string;
+  image: string;
+  price: number;
+  date: string;
+}
+
+function PostModal({ post } : { post: Post }) {
   return (
     <div>
       {/* Open the modal using document.getElementById('ID').showModal() method */}

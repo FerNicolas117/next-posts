@@ -12,7 +12,18 @@ import { HiOutlineCalendar } from "react-icons/hi2"
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-function PostItem({ post }) {
+interface Post {
+  title: string;
+  userimage: string;
+  username: string;
+  useremail: string;
+  desc: string;
+  image: string;
+  price: number;
+  date: string;
+}
+
+function PostItem({ post } : { post: Post }) {
 
   const dateObj = new Date(post.date);
   const formattedDate = dateObj.toLocaleDateString(); // Formatea la fecha
