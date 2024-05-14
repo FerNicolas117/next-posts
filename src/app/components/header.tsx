@@ -40,7 +40,7 @@ function Header() {
       
       {!session?.user ? (
         <Button onClick={handleGoogleSignIn} className='bg-gray-200 hover:bg-gray-100'>
-          <Image src={'/google-color-svgrepo-com.svg'} width={18} height={18} alt='Google' className='mr-3'/>
+          <Image src={'/googleCom.svg'} width={18} height={18} alt='Google' className='mr-3'/>
           <span className='hidden sm:block text-black'>Iniciar sesión con Google</span>
           <HiArrowLeftOnRectangle className='sm:hidden text-[20px] text-gray-600' />
         </Button>
