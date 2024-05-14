@@ -28,6 +28,7 @@ import app from "./../../../config/FirebaseConfig"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from 'sonner'
+import { error } from "console"
  
 const FormSchema = z.object({
   title: z.string().min(2, {
@@ -89,26 +90,33 @@ function FormPost() {
     //alert(JSON.stringify(data, null, 2));
   
     try {
-      const postId = Date.now().toString(); // Convierte a cadena correctamente
-      await setDoc(doc(db, "posts", postId), data); // Usa postId como referencia del documento
-      //console.log("Documento guardado correctamente con ID:", postId);
+      const postId = Date.now().toString();
 
-      if (file) {
-        const storageRef = ref(storage, `estlmarket/`+file?.name);
-        uploadBytes(storageRef, file).then((snapshot) => {
-          //console.log('Uploaded a blob or file!');
-        }).then(resp => {
-          getDownloadURL(storageRef).then((url) => {
-            //console.log('File available at', url);
-            data.image = url;
-            setDoc(doc(db, "posts", postId), data);
-          })
-          toast.success('¡Publicación creada correctamente! Redireccionando...')
-          setTimeout(() => {
-            router.push('/');
-          }, 3000);
-        })
-      }
+      const promise = () => new Promise((resolve) => setTimeout(() => resolve({ name: 'Sonner' }), 3000));
+      await setDoc(doc(db, "posts", postId), data);
+    
+      toast.promise(promise, {
+        loading: 'Creando publicación...',
+        success: () => {
+          if (file) {
+            const storageRef = ref(storage, `estlmarket/`+file?.name);
+            uploadBytes(storageRef, file).then((snapshot) => {
+            }).then(resp => {
+              getDownloadURL(storageRef).then((url) => {
+                data.image = url;
+                setDoc(doc(db, "posts", postId), data);
+              })
+              setTimeout(() => {
+                router.push('/');
+              }, 3000);
+              //toast.success('¡Publicación creada correctamente! Redireccionando...')
+            })
+            return '¡Publicación creada correctamente! Redireccionando...';
+          }
+        },
+        error: 'Error, no se ha creado la publicación. Redireccionando...',
+      })
+      
       
     } catch (error) {
       toast.error('Error, no se ha creado la publicación. Redireccionando...')
