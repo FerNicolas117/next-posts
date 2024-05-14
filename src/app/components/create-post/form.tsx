@@ -26,6 +26,8 @@ import { getDownloadURL, getStorage,
 
 import app from "./../../../config/FirebaseConfig"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { toast } from 'sonner'
  
 const FormSchema = z.object({
   title: z.string().min(2, {
@@ -49,6 +51,7 @@ function FormPost() {
   const {data:session} = useSession();
   const db = getFirestore(app);
   const storage = getStorage(app);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -72,27 +75,34 @@ function FormPost() {
 
     data.price = priceNumber;
     data.date = new Date().toISOString();
-    console.log(data);
-    alert(JSON.stringify(data, null, 2));
+    //console.log(data);
+    //alert(JSON.stringify(data, null, 2));
   
     try {
       const postId = Date.now().toString(); // Convierte a cadena correctamente
       await setDoc(doc(db, "posts", postId), data); // Usa postId como referencia del documento
-      console.log("Documento guardado correctamente con ID:", postId);
+      //console.log("Documento guardado correctamente con ID:", postId);
 
       const storageRef = ref(storage, `estlmarket/`+file?.name);
       uploadBytes(storageRef, file).then((snapshot) => {
-        console.log('Uploaded a blob or file!');
+        //console.log('Uploaded a blob or file!');
       }).then(resp => {
         getDownloadURL(storageRef).then((url) => {
-          console.log('File available at', url);
+          //console.log('File available at', url);
           data.image = url;
           setDoc(doc(db, "posts", postId), data);
         })
+        toast.success('¡Publicación creada correctamente! Redireccionando...')
+        setTimeout(() => {
+          router.push('/');
+        }, 3000);
       })
-
     } catch (error) {
-      console.error("Error al guardar el documento:", error);
+      toast.error('Error, no se ha creado la publicación. Redireccionando...')
+      setTimeout(() => {
+        router.push('/');
+      }, 3000);
+      //console.error("Error al guardar el documento:", error);
       // Maneja el error según tus necesidades
     }
   }
@@ -100,7 +110,7 @@ function FormPost() {
   return (
     <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
             name="title"
@@ -162,8 +172,8 @@ function FormPost() {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Imagen</FormLabel>
-                <FormControl>
-                  <Input id="image" accept="image/jpeg, image/png" type="file" {...field} />
+                <FormControl className="cursor-pointer">
+                  <Input id="image" accept="image/jpeg, image/png" type="file" className="cursor-pointer" {...field} />
                 </FormControl>
                 <FormDescription>
                   Esta es la imagen de tu producto.
@@ -172,8 +182,9 @@ function FormPost() {
               </FormItem>
             )}
           />
-
-          <Button type="submit">Generar publicación</Button>
+          <div className="flex justify-center">
+            <Button type="submit">Generar publicación</Button>
+          </div>
         </form>
       </Form>
     </div>

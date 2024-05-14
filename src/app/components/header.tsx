@@ -7,13 +7,17 @@ import { Button } from '@/components/ui/button'
 import { HiOutlinePencilSquare, HiArrowLeftOnRectangle } from "react-icons/hi2";
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from 'next/navigation';
-
 import { FaRegCircleUser } from "react-icons/fa6";
-
+import { PiUserCirclePlusLight } from "react-icons/pi";
+import { Toaster, toast } from 'sonner'
 
 const USER_IMAGE = 'https://res.cloudinary.com/demo/image/twitter/1330457336.jpg'
 
 function Header() {
+
+  const handleGoogleSignIn = () => {
+    signIn('google');
+  };
 
   const router = useRouter();
   const {data: session } = useSession();
@@ -22,43 +26,45 @@ function Header() {
   return (
     <div className='flex justify-between p-3 border-b-[2px] border-[#0069FF]'>
       <Image
-        src="/next.svg"
+        src="/estlmarket.svg"
         width={150}
         height={100}
         alt="Picture of logo"/>
-    <div className='flex gap-4'>
-      <Button>
-        <span onClick={() => router.push('/create-post')} className='hidden sm:block'>Crea un publicación</span>
+    <div className='flex gap-4 items-center mt-1'>
+      <Button onClick={() => router.push('/create-post')}>
+        <span className='hidden sm:block'>Crea un publicación</span>
         <HiOutlinePencilSquare className='sm:hidden text-[20px]' />
       </Button>
       
       {!session?.user ? (
-        <Button onClick={() => signIn()}>
-          <span className='hidden sm:block'>Iniciar sesión</span>
-          <HiArrowLeftOnRectangle className='sm:hidden text-[20px]' />
+        <Button onClick={handleGoogleSignIn} className='bg-gray-200 hover:bg-gray-100'>
+          <Image src={'/google-color-svgrepo-com.svg'} width={18} height={18} alt='Google' className='mr-3'/>
+          <span className='hidden sm:block text-black'>Iniciar sesión con Google</span>
+          <HiArrowLeftOnRectangle className='sm:hidden text-[20px] text-gray-600' />
         </Button>
       ) : (
-        <Button onClick={async () => {
+        <Button className='bg-gray-200 hover:bg-gray-100' onClick={async () => {
           await signOut({
             callbackUrl: "/",
           }
           )
         }}>
-          <span className='hidden sm:block'>Cerrar sesión</span>
-          <HiArrowLeftOnRectangle className='sm:hidden text-[20px]' />
+          <span className='hidden sm:block text-black'>Cerrar sesión</span>
+          <HiArrowLeftOnRectangle className='sm:hidden text-[20px] text-gray-600' />
         </Button>
         
       )}
 
       {!session?.user ? (
-        <FaRegCircleUser className='text-3xl mt-1 items-center' />
+        <PiUserCirclePlusLight className='text-4xl mt-1 items-center mb-1' />
       ) : (
         <Image
-          src={USER_IMAGE}
-          width={50}
-          height={50}
+          src={session?.user?.image}
+          width={40}
+          height={40}
           alt="Picture of the author"
-          className='rounded-full '
+          className='rounded-full text-3xl cursor-pointer'
+          onClick={() => router.push('/profile')}
         />
       )}
     </div>

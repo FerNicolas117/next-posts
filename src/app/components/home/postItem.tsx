@@ -20,7 +20,7 @@ function PostItem({ post }) {
 
   return (
     <div className="flex justify-center mt-8">
-      <Card className="w-1/2">
+      <Card className="xl:w-1/2 lg:w-1/2 md:w-full sm:w-full w-full">
         <CardHeader>
         <div className="flex items-center">
           <Avatar>
@@ -32,35 +32,41 @@ function PostItem({ post }) {
             <p className="ml-4 text-gray-600">{ post.useremail }</p>
           </div>
         </div>
-          <br></br>
-          <CardTitle>{ post.title }</CardTitle>
-          <br></br>
-          <div className="mt-8 flex items-center text-[#0069FF] gap-2 mb-2">
-            <HiOutlineCalendar className="text-[20px]" />
-            { formattedDate } a las { formattedTime }
+          <div className="mb-8">
+            <CardTitle  className="mt-3">{ post.title }</CardTitle>
           </div>
-          <CardDescription>{ post.useremail }</CardDescription>
+            <div className="flex items-center text-[#0069FF] gap-2 mb-2">
+              <HiOutlineCalendar className="text-[20px] mt-2" />
+              <div className="mt-2">
+                { formattedDate } a las { formattedTime }
+              </div>
+            </div>
+            <CardDescription>{ post.useremail }</CardDescription>
         </CardHeader>
-        <div className="flex items-center">
-          <CardContent className="w-2/3">
+        <div className="p-2 justify-items-center">
+          <CardContent className="">
             <p>{ post.desc }</p>
           </CardContent>
-          <div className="w-1/3 items-center justify-center flex bg-gray-200 rounded-md mr-6 min-h-32 max-h-64 max-w-2xl">
+          <div className="items-center justify-center flex rounded-md ">
             <Image
               src={ post.image }
               alt={ post.title }
-              width={200}
-              height={200}
-              className="rounded-md object-cover h-full w-full"/>
+              width={400}
+              height={400}
+              className="rounded-md object-contain h-48 -w-96"/>
           </div>
         </div>
         <CardFooter>
-          <div className="mt-8 flex items-center text-[#0069FF] mb-2">
+          <div className="mt-8 flex items-center text-[#0069FF]">
+            <p className="text-lg font-bold">Precio: </p>
             <MdOutlineAttachMoney className="text-[26px]" />
             <p className="text-[22px] font-bold">{`${post.price.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`}</p>
+            {/* <Button className="ml-8 hover:bg-[#21AC38]">
+              <Image src={'/whatsapp.svg'} width={22} height={22} alt='Google' className='mr-3'/>
+              <span className='hidden sm:block text-white'>Contactar por WhatsApp</span>
+            </Button> */}
           </div>
         </CardFooter>
-        <Button className="ml-8 mb-6">Contactar por WhatsApp</Button>
       </Card>
     </div>
   )

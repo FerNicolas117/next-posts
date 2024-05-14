@@ -6,6 +6,8 @@ import Header from "./components/header";
 import Footer from "./components/footer";
 import { Providers } from "./Providers";
 
+import { Toaster } from 'sonner';
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -24,6 +26,7 @@ export default function RootLayout({
         <Providers>
           <Header />
             {children}
+            <Toaster richColors position="top-center" />
           <Footer />
         </Providers>
       </body>
