@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react';
 
 import app from "../../config/FirebaseConfig"
-import { collection, deleteDoc, getDocs, getFirestore, query, where, doc } from 'firebase/firestore';
+import { collection, deleteDoc, getDocs, getFirestore, query, where, doc, DocumentData } from 'firebase/firestore';
 import { set } from 'react-hook-form';
 import PostItem from '../components/home/postItem';
 import { Button } from '@/components/ui/button';
@@ -24,14 +24,26 @@ import { toast } from 'sonner';
 import { HiArrowSmallLeft } from "react-icons/hi2";
 import { useRouter } from 'next/navigation';
 
+type Post = {
+  title: string;
+  userimage: string;
+  username: string;
+  useremail: string;
+  desc: string;
+  image: string;
+  price: number;
+  date: string;
+  // ... any other properties that a Post should have
+};
+
 
 function ProfilePage() {
 
   const {data:session} = useSession();
-  const [userPost, setUserPost] = useState([]);
+  const [userPost, setUserPost] = useState<DocumentData[]>([]);
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
   const db = getFirestore(app);
   const router = useRouter();
@@ -43,28 +55,32 @@ function ProfilePage() {
   },[session]);
 
   const getUserPost = async() => {
-    const q = query(collection(db, "posts"),
-    where("useremail", "==", session?.user.email))
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      let data=doc.data();
-      data.id=doc.id;
-      setUserPost(userPost => [...userPost, data]);
-    });
+    if (session?.user) {
+      const q = query(collection(db, "posts"),
+      where("useremail", "==", session.user.email))
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        let data=doc.data();
+        data.id=doc.id;
+        setUserPost(userPost => [...userPost, data]);
+      });
+    }
   }
 
-  const onDeletePost = async(id) => {
+  const onDeletePost = async(id: string) => {
     //await deleteDoc(doc(db, "posts", id));
     setSelectedPostId(id);
   }
 
   const confirmDelete = async () => {
-    await deleteDoc(doc(db, 'posts', selectedPostId));
-    setOpenDialog(false);
-    toast.success('Se ha eliminado la publicación correctamente.')
-    setTimeout(() => {
-      window.location.reload();
-    }, 3000);
+    if (selectedPostId) {
+      await deleteDoc(doc(db, 'posts', selectedPostId));
+      setOpenDialog(false);
+      toast.success('Se ha eliminado la publicación correctamente.')
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+    }
   };
 
   return (
@@ -81,7 +97,7 @@ function ProfilePage() {
         <div className='justify-center'>
           {userPost && userPost?.map((item) => (
             <div className='' key={item.id}>
-              <PostItem post={item} />
+              <PostItem post={item as Post} />
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <div className='flex justify-center'>

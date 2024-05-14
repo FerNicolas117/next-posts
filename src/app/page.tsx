@@ -10,10 +10,22 @@ import app from "../config/FirebaseConfig"
 import { useEffect, useState } from "react";
 import Posts from "./components/home/posts";
 
+type Post = {
+  title: string;
+  userimage: string;
+  username: string;
+  useremail: string;
+  desc: string;
+  image: string;
+  price: number;
+  date: string;
+  // ... any other properties that a Post should have
+};
+
 export default function Home() {
 
   const db = getFirestore(app);
-  const  [posts, setPosts] = useState<DocumentData[]>([]);
+  const  [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
     getPost();
@@ -21,11 +33,12 @@ export default function Home() {
 
   const getPost = async () => {
     const querySnapshot = await getDocs(collection(db, "posts"));
+    const postsData: Post[] = [];
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      //console.log(doc.id, " => ", doc.data());
-      setPosts(posts => [...posts, doc.data()]);
+      const postData = doc.data() as unknown as Post; // Cast doc.data() to Post
+      postsData.push(postData);
     });
+    setPosts(postsData);
   }
 
   return (
