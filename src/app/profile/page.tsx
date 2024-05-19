@@ -112,32 +112,38 @@ function ProfilePage() {
         </div>
 
         <div className='justify-center'>
-          {userPost && userPost?.map((item) => (
-            <div className='' key={item.id}>
-              <PostItem post={item as Post} />
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <div className='flex justify-center'>
-                    <Button className='bg-red-500 hover:bg-red-600 xl:w-1/2 lg:w-1/2 md:w-full sm:w-full w-full mt-2' onClick={() => onDeletePost(item.id)}>
-                      Eliminar publicación
-                    </Button>
-                  </div>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>¿Estás seguro de eliminar esta publicación?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Esta acción no se puede deshacer. Eliminará permanentemente la publicación.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction onClick={confirmDelete}>Eliminar publicación</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+          {userPost.length > 0 ? (
+            userPost.map((item) => (
+              <div className='' key={item.id}>
+                <PostItem post={item as Post} />
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <div className='flex justify-center'>
+                      <Button className='bg-red-500 hover:bg-red-600 xl:w-1/2 lg:w-1/2 md:w-full sm:w-full w-full mt-2' onClick={() => onDeletePost(item.id)}>
+                        Eliminar publicación
+                      </Button>
+                    </div>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>¿Estás seguro de eliminar esta publicación?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Esta acción no se puede deshacer. Eliminará permanentemente la publicación.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                      <AlertDialogAction onClick={confirmDelete}>Eliminar publicación</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            ))
+          ) : (
+            <div className='flex justify-center mt-12'>
+              <p className='text-[22px] text-gray-500'>Sin publicaciones</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
