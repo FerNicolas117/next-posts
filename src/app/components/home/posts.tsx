@@ -10,7 +10,7 @@ interface Post {
   useremail: string;
   desc: string;
   image: string;
-  price: number;
+  price: string;
   date: string;
   tel: string;
 }

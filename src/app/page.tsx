@@ -19,7 +19,7 @@ type Post = {
   useremail: string;
   desc: string;
   image: string;
-  price: number;
+  price: string;
   date: string;
   tel: string;
   // ... any other properties that a Post should have
