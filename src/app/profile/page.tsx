@@ -8,6 +8,7 @@ import { collection, deleteDoc, getDocs, getFirestore, query, where, doc, Docume
 import { set } from 'react-hook-form';
 import PostItem from '../components/home/postItem';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 import {
   AlertDialog,
@@ -23,6 +24,7 @@ import {
 import { toast } from 'sonner';
 import { HiArrowSmallLeft } from "react-icons/hi2";
 import { useRouter } from 'next/navigation';
+import { get } from 'http';
 
 type Post = {
   title: string;
@@ -41,8 +43,10 @@ type Post = {
 function ProfilePage() {
 
   const {data:session} = useSession();
-  const [userPost, setUserPost] = useState<DocumentData[]>([]);
+  const username = session?.user?.name;
+  const email = session?.user?.email;
 
+  const [userPost, setUserPost] = useState<DocumentData[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
@@ -78,11 +82,17 @@ function ProfilePage() {
       await deleteDoc(doc(db, 'posts', selectedPostId));
       setOpenDialog(false);
       toast.success('Se ha eliminado la publicación correctamente.')
-      setTimeout(() => {
+      /*setTimeout(() => {
         window.location.reload();
-      }, 3000);
+      }, 3000);*/
     }
+    reaload();
   };
+
+  const reaload = async() => {
+    setUserPost([]);
+    getUserPost();
+  }
 
   return (
     <div>
@@ -95,6 +105,12 @@ function ProfilePage() {
       <div className='px-5 sm:px-7 md:px-10 mt-9 mb-9'>
         <h2 className='xl:text-[35px] lg:text-[30px] md:text-[26px] sm:text-[22px] text-[20px] font-extrabold text-[#0069FF]'>Perfil de usuario</h2>
         <p>Gestiona tus publicaciones</p>
+
+        <div className='mt-4'>
+          <p className='font-bold'>{ username }</p>
+          <p className='text-gray-500'>{ email }</p>
+        </div>
+
         <div className='justify-center'>
           {userPost && userPost?.map((item) => (
             <div className='' key={item.id}>
