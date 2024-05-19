@@ -16,26 +16,25 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
 import { useSession } from "next-auth/react"
 
-import { getFirestore } from "firebase/firestore"
-import { doc, setDoc } from "firebase/firestore"
-import { getDownloadURL, getStorage,
-  ref, uploadBytes } from "firebase/storage";
+import { doc, getFirestore, setDoc } from "firebase/firestore"
+import {
+  getDownloadURL, getStorage,
+  ref, uploadBytes
+} from "firebase/storage"
 
-import app from "./../../../config/FirebaseConfig"
-import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { toast } from 'sonner'
-import { error } from "console"
+import app from "./../../../config/FirebaseConfig"
  
 const FormSchema = z.object({
   title: z.string().min(2, {
     message: "El título debe tener al menos 2 caracteres.",
   }),
-  desc: z.string().min(50, {
-    message: "La descripción debe tener al menos 50 caracteres.",
+  desc: z.string().min(10, {
+    message: "La descripción debe tener al menos 10 caracteres.",
   }),
   price: z.string().min(1, {
     message: "El precio debe tener al menos 1 caracter.",
@@ -87,6 +86,16 @@ function FormPost() {
       if (session.user.image) {
         data.userimage = session.user.image;
       }
+    } else {
+      router.push('/');
+      return;
+    }
+
+    // Asegúrate de que el usuario que está intentando publicar es el mismo que el usuario de la sesión
+    if (session.user.email !== data.useremail) {
+      // Los emails no coinciden, muestra un mensaje de error o redirige al usuario a una página de error
+      toast.error('No tienes permiso para realizar esta acción.');
+      return;
     }
 
     const priceNumber = parseFloat(data.price);
@@ -100,30 +109,34 @@ function FormPost() {
     try {
       const postId = Date.now().toString();
 
-      const promise = () => new Promise((resolve) => setTimeout(() => resolve({ name: 'Sonner' }), 3000));
+      const promise = () => new Promise((resolve) => setTimeout(() => resolve({ name: 'Sonner' }), 2000));
       await setDoc(doc(db, "posts", postId), data);
     
       toast.promise(promise, {
-        loading: 'Creando publicación...',
+        loading: 'Generando publicación...',
         success: () => {
           if (file) {
             const storageRef = ref(storage, `estlmarket/`+file?.name);
             uploadBytes(storageRef, file).then((snapshot) => {
-            }).then(resp => {
               getDownloadURL(storageRef).then((url) => {
                 data.image = url;
-                setDoc(doc(db, "posts", postId), data);
+                setDoc(doc(db, "posts", postId), data).then(() => {
+                  toast.promise(promise, {
+                    loading: 'Cargando...',
+                    success: 'Publicación visible en el feed.',
+                    error: 'Error al subir la publicación.',
+                  });
+                  router.push('/');
+                })
               })
-              setTimeout(() => {
-                router.push('/');
-              }, 3000);
-              //toast.success('¡Publicación creada correctamente! Redireccionando...')
             })
-            return '¡Publicación creada correctamente! Redireccionando...';
           }
+          return '¡Publicación cargada éxitosamente! Redireccionando...';
         },
-        error: 'Error, no se ha creado la publicación. Redireccionando...',
-      })
+        error: 'Error al cargar publicación.',
+      });
+      //setTimeout(() => {
+      //}, 3000);
       
       
     } catch (error) {
