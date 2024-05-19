@@ -62,6 +62,7 @@ function FormPost() {
   const db = getFirestore(app);
   const storage = getStorage(app);
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -75,6 +76,7 @@ function FormPost() {
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    setIsSubmitting(true);
     if (session?.user) {
       if (session.user.name) {
         data.username = session.user.name;
@@ -227,7 +229,7 @@ function FormPost() {
             )}
           />
           <div className="flex justify-center">
-            <Button type="submit">Generar publicación</Button>
+            <Button type="submit" disabled={isSubmitting}>Generar publicación</Button>
           </div>
         </form>
       </Form>
