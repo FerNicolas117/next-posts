@@ -1,11 +1,16 @@
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
-function Search() {
+type SearchProps = {
+  onSearch: (searchText: string) => Promise<void>;
+};
+
+function Search({ onSearch }: SearchProps) {
 
   const [searchText, setSearchText] = useState('');
   const onSearchButtonClick = () => {
     console.log("Search text: ", searchText)
+    onSearch(searchText);
   }
 
   return (

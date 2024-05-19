@@ -19,7 +19,7 @@ interface Post {
   useremail: string;
   desc: string;
   image: string;
-  price: number;
+  price: string;
   date: string;
   tel: string;
 }
@@ -29,6 +29,7 @@ function PostItem({ post } : { post: Post }) {
   const dateObj = new Date(post.date);
   const formattedDate = dateObj.toLocaleDateString(); // Formatea la fecha
   const formattedTime = dateObj.toLocaleTimeString(); // Formatea la hora
+  const priceNumberFloat = parseFloat(post.price);
 
   return (
     <div className="flex justify-center mt-8">
@@ -81,7 +82,7 @@ function PostItem({ post } : { post: Post }) {
           <div className="mt-8 flex items-center text-[#0069FF]">
             <p className="text-lg font-bold">Precio: </p>
             <MdOutlineAttachMoney className="text-[26px]" />
-            <p className="text-[22px] font-bold">{`${post.price.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`}</p>
+            <p className="text-[22px] font-bold">{`${priceNumberFloat.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`}</p>
             {/* <Button className="ml-8 hover:bg-[#21AC38]">
               <Image src={'/whatsapp.svg'} width={22} height={22} alt='Google' className='mr-3'/>
               <span className='hidden sm:block text-white'>Contactar por WhatsApp</span>

@@ -105,6 +105,7 @@ function FormPost() {
     data.date = new Date(Date.now()).toISOString();
     //console.log(data);
     //alert(JSON.stringify(data, null, 2));
+    data.title = data.title.trim().toUpperCase();
   
     try {
       const postId = Date.now().toString();
