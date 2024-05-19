@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import Posts from "./components/home/posts";
 import { Button } from "@/components/ui/button";
 import { HiMiniArrowPath } from "react-icons/hi2";
+import { toast } from 'sonner'
 
 type Post = {
   title: string;
@@ -55,13 +56,25 @@ export default function Home() {
     setPosts(postsData);
   }
 
+  const reloadPost = async () => {
+    const promise = () => new Promise((resolve) => setTimeout(() => resolve({ name: 'Sonner' }), 2000));
+    toast.promise(promise, {
+      loading: 'Actualizando...',
+      success: () => {
+       return `Feed actualizado`;
+      },
+      error: 'Error',
+    });
+    getPost();
+  }
+
   return (
     <div className="px-5 sm:px-7 md:px-10 mt-9 mb-9">
       <Hero />
       <Search onSearch={ searchPost } />
       <div className="flex items-center justify-center">
-        <div className="w-1/2">
-        <Button onClick={() => getPost()} className="mt-4 bg-white hover:bg-white">
+        <div className="w-1/2 flex justify-center">
+        <Button onClick={() => reloadPost()} className="mt-4 bg-white hover:bg-white p-0">
           <HiMiniArrowPath className="text-[18px] text-black" />
           <span className="ml-1.5 text-black">Actualizar feed</span>
         </Button>
