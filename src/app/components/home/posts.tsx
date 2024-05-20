@@ -29,7 +29,7 @@ function Posts({ posts } : { posts: Post[] }) {
   }, [posts]);
 
   return (
-    <div className="mt-12">
+    <div className="mt-6">
       <p className="text-[24px] font-bold text-center">Publicaciones</p>
       {isLoading ? posts.map((_, index) => <SkeletonPost key={index} />) : posts.map((item, index) => <PostItem post={item} key={index} />)}
     </div>
