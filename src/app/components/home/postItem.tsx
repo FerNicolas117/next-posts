@@ -67,7 +67,7 @@ function PostItem({ post } : { post: Post }) {
             </div>
         </CardHeader>
         <div className="p-2 justify-items-center">
-          <CardContent className="">
+          <CardContent className="" style={{ wordBreak: 'break-word'}}>
             <p>{ post.desc }</p>
           </CardContent>
           <div className="items-center justify-center flex rounded-md ">
