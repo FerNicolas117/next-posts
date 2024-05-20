@@ -30,6 +30,7 @@ function PostItem({ post } : { post: Post }) {
   const formattedDate = dateObj.toLocaleDateString(); // Formatea la fecha
   const formattedTime = dateObj.toLocaleTimeString(); // Formatea la hora
   const priceNumberFloat = parseFloat(post.price);
+  const preformattedMessage = encodeURIComponent(`Hola, vi tu anuncio en la app de la comunidad y me interesa. Me podrías dar más información?`);
 
   return (
     <div className="flex justify-center mt-8">
@@ -56,7 +57,7 @@ function PostItem({ post } : { post: Post }) {
             </div>
             <div>
               <CardDescription className="mt-2 cursor-pointer flex items-center">
-              <a href={`https://wa.me/${post.tel}`} target="_blank" rel="noopener noreferrer">
+              <a href={`https://wa.me/${post.tel}?text=${preformattedMessage}`} target="_blank" rel="noopener noreferrer">
                 <Button className="bg-gray-200 hover:bg-gray-300">
                   <Image src={'/whatsapp.svg'} width={22} height={22} alt='Google' className='mr-2'/>
                   <span className="text-black">{ post.tel }</span>
