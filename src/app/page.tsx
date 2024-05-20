@@ -5,7 +5,7 @@ import Image from "next/image";
 import Hero from "./components/home/hero";
 import Search from "./components/home/search";
 import Categories from "./components/home/categories";
-import { getFirestore, collection, getDocs, DocumentData, query, where, QuerySnapshot, orderBy, startAt, endAt } from "firebase/firestore";
+import { getFirestore, collection, getDocs, DocumentData, query, where, QuerySnapshot, startAt, endAt, QueryOrderByConstraint, orderBy } from "firebase/firestore";
 import app from "../config/FirebaseConfig"
 import { useEffect, useState } from "react";
 import Posts from "./components/home/posts";
@@ -36,7 +36,7 @@ export default function Home() {
   },[])
 
   const getPost = async () => {
-    const querySnapshot = await getDocs(collection(db, "posts"));
+    const querySnapshot = await getDocs(query(collection(db, "posts"), orderBy("date", "desc")));
     const postsData: Post[] = [];
     querySnapshot.forEach((doc) => {
       const postData = doc.data() as unknown as Post; // Cast doc.data() to Post
