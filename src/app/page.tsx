@@ -49,9 +49,6 @@ export default function Home() {
   }
 
   const searchPost = async (searchText: string) => {
-
-    await new Promise((resolve) => setTimeout(resolve, 10000));
-
     const upperCaseSearchText = searchText.toUpperCase();
     const querySnapshot = await getDocs(query(collection(db, "posts"), orderBy("title"), startAt(upperCaseSearchText), endAt(upperCaseSearchText + "\uf8ff")));
     const postsData: Post[] = [];
