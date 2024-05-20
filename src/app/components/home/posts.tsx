@@ -20,12 +20,12 @@ function Posts({ posts } : { posts: Post[] }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simula un tiempo de carga de 3 segundos
+    // Simulacion de tiempo de carga
     setTimeout(() => {
       if (posts.length) {
         setIsLoading(false);
       }
-    }, 500);
+    }, 0);
   }, [posts]);
 
   return (

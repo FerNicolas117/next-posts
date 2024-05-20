@@ -7,11 +7,12 @@ import Search from "./components/home/search";
 import Categories from "./components/home/categories";
 import { getFirestore, collection, getDocs, DocumentData, query, where, QuerySnapshot, startAt, endAt, QueryOrderByConstraint, orderBy } from "firebase/firestore";
 import app from "../config/FirebaseConfig"
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Posts from "./components/home/posts";
 import { Button } from "@/components/ui/button";
 import { HiMiniArrowPath } from "react-icons/hi2";
 import { toast } from 'sonner'
+import Loading from "./components/loading";
 
 type Post = {
   title: string;
@@ -30,6 +31,7 @@ export default function Home() {
 
   const db = getFirestore(app);
   const  [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getPost();
@@ -43,9 +45,13 @@ export default function Home() {
       postsData.push(postData);
     });
     setPosts(postsData);
+    setLoading(false);
   }
 
   const searchPost = async (searchText: string) => {
+
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+
     const upperCaseSearchText = searchText.toUpperCase();
     const querySnapshot = await getDocs(query(collection(db, "posts"), orderBy("title"), startAt(upperCaseSearchText), endAt(upperCaseSearchText + "\uf8ff")));
     const postsData: Post[] = [];
@@ -80,7 +86,7 @@ export default function Home() {
         </Button>
         </div>
       </div>
-      {posts? <Posts posts={ posts } /> : null }
+      {loading ? <Loading /> : posts ? <Posts posts={posts} /> : null}
     </div>
   );
 }
