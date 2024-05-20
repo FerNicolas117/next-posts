@@ -30,7 +30,7 @@ function PostItem({ post } : { post: Post }) {
   const formattedDate = dateObj.toLocaleDateString(); // Formatea la fecha
   const formattedTime = dateObj.toLocaleTimeString(); // Formatea la hora
   const priceNumberFloat = parseFloat(post.price);
-  const preformattedMessage = encodeURIComponent(`Hola, vi tu anuncio en la app de la comunidad y me interesa. Me podrías dar más información?`);
+  const preformattedMessage = encodeURIComponent(`Hola, vi tu anuncio en la app web (estlMarket) de la comunidad y me interesa. Me podrías dar más información?. El producto por el que te contacto es: ${post.title}`);
 
   return (
     <div className="flex justify-center mt-8">
