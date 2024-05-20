@@ -31,7 +31,8 @@ function Header() {
         src="/estlmarket.svg"
         width={150}
         height={100}
-        alt="Picture of logo"/>
+        alt="Picture of logo"
+        className='2xl:w-32 xl:w-32 lg:w-32 md:w-32 sm:w-28 w-24'/>
     <div className='flex gap-4 items-center mt-1'>
       <Button onClick={() => router.push('/create-post')}>
         <span className='hidden sm:block'>Crea un publicación</span>
