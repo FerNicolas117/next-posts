@@ -28,7 +28,7 @@ function Header() {
   return (
     <div className='flex justify-between p-3 border-b-[2px] border-[#0069FF]'>
       <Image
-        src="/estlmarket.svg"
+        src="/garzamarket.svg"
         width={150}
         height={100}
         alt="Picture of logo"
