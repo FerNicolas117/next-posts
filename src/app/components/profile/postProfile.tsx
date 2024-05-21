@@ -39,7 +39,7 @@ function PostProfile({ post } : { post: Post }) {
           <CardTitle className='text-base'>{ post.title }</CardTitle>
           <div className='flex items-center'>
             <div className="text-sm text-gray-500 w-4/5">
-              { formattedDate } a las { formattedTime } por { post.username}
+              { formattedDate } a las { formattedTime }
               <CardDescription className='text-sm'>Teléfono de contacto: { post.tel }</CardDescription>
             </div>
             <div className='w-1/5 flex justify-end'>
