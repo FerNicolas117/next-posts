@@ -25,6 +25,7 @@ import { toast } from 'sonner';
 import { HiArrowSmallLeft } from "react-icons/hi2";
 import { useRouter } from 'next/navigation';
 import { get } from 'http';
+import PostProfile from '../components/profile/postProfile';
 
 type Post = {
   title: string;
@@ -111,11 +112,16 @@ function ProfilePage() {
           <p className='text-gray-500'>{ email }</p>
         </div>
 
+        
+
         <div className='justify-center'>
           {userPost.length > 0 ? (
             userPost.map((item) => (
               <div className='' key={item.id}>
-                <PostItem post={item as Post} />
+                {/*<PostItem post={item as Post} />*/}
+                <div className='mt-12'>
+                  <PostProfile post={ item as Post } />
+                </div>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <div className='flex justify-center'>
