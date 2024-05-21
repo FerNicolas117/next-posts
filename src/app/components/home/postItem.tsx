@@ -76,7 +76,7 @@ function PostItem({ post } : { post: Post }) {
               alt={ post.title }
               width={400}
               height={400}
-              className="rounded-md object-contain h-48 -w-96"/>
+              className="rounded object-contain h-48 -w-96"/>
           </div>
         </div>
         <CardFooter>

@@ -119,7 +119,7 @@ function ProfilePage() {
             userPost.map((item) => (
               <div className='' key={item.id}>
                 {/*<PostItem post={item as Post} />*/}
-                <div className='mt-12'>
+                <div className='mt-8'>
                   <PostProfile post={ item as Post } />
                 </div>
                 <AlertDialog>
